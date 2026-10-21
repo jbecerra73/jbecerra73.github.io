@@ -1,6 +1,6 @@
 ---
 // Landing temporal mientras se arma el sitio completo (ver _home.astro).
-// Estética inspirada en posthog.com: escritorio con barra de menú, íconos y ventanas.
+// Estética inspirada en posthog.com, llevada a un escritorio retro tipo Mac clásico / Win95.
 import { execSync } from 'node:child_process';
 
 const redes = [
@@ -30,7 +30,7 @@ try {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Pixelify+Sans:wght@500;700&family=Silkscreen&display=swap"
       rel="stylesheet"
     />
   </head>
@@ -52,10 +52,11 @@ try {
       <ul class="icons" aria-label="Shortcuts">
         <li>
           <button type="button" class="icon" id="reopen" aria-label="Open hello.md">
-            <svg viewBox="0 0 48 48" aria-hidden="true">
-              <path d="M10 4h20l10 10v30H10z" fill="var(--paper)" stroke="var(--fg)" stroke-width="2" />
-              <path d="M30 4v10h10" fill="none" stroke="var(--fg)" stroke-width="2" />
-              <path d="M16 24h16M16 30h16M16 36h10" stroke="var(--muted)" stroke-width="2" />
+            <svg viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M3 1h7v1h1v1h1v1h1v11H3z" fill="var(--fg)" />
+              <path d="M4 2h5v3h3v9H4z" fill="var(--paper)" />
+              <path d="M10 2h1v1h1v1h-2z" fill="var(--muted)" />
+              <path d="M5 7h6v1H5zM5 9h6v1H5zM5 11h4v1H5z" fill="var(--muted)" />
             </svg>
             <span>hello.md</span>
           </button>
@@ -64,9 +65,11 @@ try {
           redes.map((r) => (
             <li>
               <a class="icon" href={r.href} target="_blank" rel="noopener">
-                <svg viewBox="0 0 48 48" aria-hidden="true">
-                  <path d="M4 12h16l4 4h20v26H4z" fill={r.color} stroke="var(--fg)" stroke-width="2" />
-                  <path d="M4 20h40" stroke="var(--fg)" stroke-width="2" />
+                <svg viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="M1 3h6v1h1v1h7v9H1z" fill="var(--fg)" />
+                  <path d="M2 4h4v1h1v1h7v7H2z" fill={r.color} />
+                  <path d="M2 6h12v1H2z" fill="var(--fg)" />
+                  <path d="M2 7h12v1H2z" fill="#fff" fill-opacity="0.35" />
                 </svg>
                 <span>{r.label} ↗</span>
               </a>
@@ -77,13 +80,13 @@ try {
 
       <article class="window" id="win" aria-labelledby="name">
         <div class="titlebar" id="titlebar">
-          <span class="title">hello.md</span>
           <span class="controls">
-            <button type="button" id="close" aria-label="Close window">✕</button>
+            <button type="button" id="close" aria-label="Close window"></button>
           </span>
+          <span class="title">hello.md</span>
         </div>
         <div class="body">
-          <p class="kicker">Software engineer</p>
+          <p class="kicker">&gt; Software engineer</p>
           <h1 id="name">Joaquín <mark>Becerra</mark></h1>
           <p class="lead">
             I’m building this site. In the meantime, open one of the folders on the desktop to
@@ -109,29 +112,28 @@ try {
     <style is:global>
       :root {
         --bg: #eeefe9;
+        --dither: #d6d8ce;
         --bar: #e5e7e0;
         --paper: #fdfdf8;
         --fg: #151515;
         --muted: #65675e;
-        --line: #bfc1b7;
         --red: #f54e00;
         --yellow: #f7a501;
         --blue: #1d4aff;
-        --highlight: #f7a50166;
+        --pixel: 'Silkscreen', ui-monospace, monospace;
         color-scheme: light;
       }
       @media (prefers-color-scheme: dark) {
         :root {
           --bg: #1d1f27;
+          --dither: #2a2d38;
           --bar: #23252f;
           --paper: #2a2c36;
           --fg: #eeefe9;
           --muted: #9fa1a8;
-          --line: #4a4c56;
           --red: #f1662c;
           --yellow: #f7b32b;
           --blue: #5c7cff;
-          --highlight: #f7a50140;
           color-scheme: dark;
         }
       }
@@ -146,35 +148,48 @@ try {
       body {
         margin: 0;
         background-color: var(--bg);
-        /* Fondo de escritorio: grilla punteada tenue. */
-        background-image: radial-gradient(var(--line) 1px, transparent 1px);
-        background-size: 22px 22px;
+        /* Fondo de escritorio con tramado (dithering) de 2px, como los patrones de System 7. */
+        background-image:
+          linear-gradient(45deg, var(--dither) 25%, transparent 25%, transparent 75%, var(--dither) 75%),
+          linear-gradient(45deg, var(--dither) 25%, transparent 25%, transparent 75%, var(--dither) 75%);
+        background-size: 4px 4px;
+        background-position:
+          0 0,
+          2px 2px;
         color: var(--fg);
-        font-family: 'IBM Plex Sans', system-ui, sans-serif;
-        font-size: 15px;
-        line-height: 1.5;
+        font-family: 'IBM Plex Mono', ui-monospace, monospace;
+        font-size: 14px;
+        line-height: 1.55;
         display: grid;
         grid-template-rows: auto 1fr;
         overflow: hidden;
+      }
+      /* Líneas de barrido muy tenues encima de todo, como un monitor CRT. */
+      body::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 10;
+        background: repeating-linear-gradient(transparent 0 2px, rgb(0 0 0 / 0.04) 2px 3px);
       }
       a {
         color: inherit;
       }
       code {
-        font-family: 'IBM Plex Mono', ui-monospace, monospace;
-        font-size: 0.85em;
+        font-family: inherit;
       }
 
       .menubar {
         display: flex;
         align-items: center;
-        gap: 1.25rem;
-        height: 2.5rem;
+        gap: 1.5rem;
+        height: 2.25rem;
         padding: 0 1rem;
-        background: var(--bar);
-        border-bottom: 1px solid var(--line);
-        font-size: 13px;
-        font-weight: 500;
+        background: var(--paper);
+        border-bottom: 2px solid var(--fg);
+        font-family: var(--pixel);
+        font-size: 12px;
         position: relative;
         z-index: 2;
       }
@@ -182,7 +197,6 @@ try {
         display: flex;
         align-items: center;
         gap: 0.5rem;
-        font-weight: 700;
         text-decoration: none;
       }
       .mark {
@@ -190,15 +204,14 @@ try {
         place-items: center;
         width: 1.4rem;
         height: 1.4rem;
-        border-radius: 4px;
+        border: 2px solid var(--fg);
         background: var(--red);
         color: #fff;
-        font-size: 10px;
-        font-weight: 700;
+        font-size: 9px;
       }
       .menus {
         display: flex;
-        gap: 1.25rem;
+        gap: 1.5rem;
         color: var(--muted);
       }
       .menus code {
@@ -208,22 +221,13 @@ try {
         margin-left: auto;
         display: inline-flex;
         align-items: center;
-        gap: 0.4rem;
-        padding: 0.1rem 0.6rem;
-        border: 1px solid var(--line);
-        border-radius: 999px;
-        background: var(--paper);
+        gap: 0.5rem;
       }
       .status i {
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
+        width: 8px;
+        height: 8px;
         background: var(--red);
-        animation: pulse 1.6s ease-in-out infinite;
-      }
-      .clock {
-        font-family: 'IBM Plex Mono', ui-monospace, monospace;
-        font-variant-numeric: tabular-nums;
+        animation: blink 1s steps(1) infinite;
       }
 
       .desktop {
@@ -237,39 +241,46 @@ try {
         padding: 1.25rem 1rem;
         display: flex;
         flex-direction: column;
-        gap: 0.75rem;
+        gap: 1rem;
         width: max-content;
       }
       .icon {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.3rem;
+        gap: 0.35rem;
         width: 5.5rem;
-        padding: 0.4rem 0.25rem;
-        border: 1px solid transparent;
-        border-radius: 6px;
+        padding: 0;
+        border: 0;
         background: none;
         color: inherit;
-        font: inherit;
-        font-size: 13px;
-        font-weight: 500;
+        font-family: var(--pixel);
+        font-size: 11px;
+        white-space: nowrap;
         text-decoration: none;
         cursor: pointer;
       }
       .icon svg {
-        width: 2.75rem;
-        height: 2.75rem;
-        transition: transform 0.15s ease;
+        width: 3rem;
+        height: 3rem;
+        shape-rendering: crispEdges;
       }
-      .icon:hover,
+      .icon span {
+        padding: 0 0.3rem;
+        background: var(--bg);
+      }
+      /* Selección "invertida" como en los escritorios clásicos. */
+      .icon:hover span,
+      .icon:focus-visible span {
+        background: var(--fg);
+        color: var(--bg);
+      }
       .icon:focus-visible {
-        background: color-mix(in srgb, var(--blue) 12%, transparent);
-        border-color: color-mix(in srgb, var(--blue) 35%, transparent);
         outline: none;
       }
-      .icon:hover svg {
-        transform: translateY(-2px) rotate(-3deg);
+      .icon:hover svg,
+      .icon:focus-visible svg {
+        filter: invert(0.15);
       }
 
       .window {
@@ -278,32 +289,30 @@ try {
         left: 50%;
         width: min(40rem, calc(100vw - 2rem));
         background: var(--paper);
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        box-shadow:
-          0 1px 0 var(--line),
-          0 18px 40px -12px rgb(0 0 0 / 0.25);
+        border: 2px solid var(--fg);
+        box-shadow: 6px 6px 0 var(--fg);
         transform: translate(-50%, -50%);
-        overflow: hidden;
       }
       .window.dragging {
-        box-shadow:
-          0 1px 0 var(--line),
-          0 28px 60px -14px rgb(0 0 0 / 0.35);
+        box-shadow: 10px 10px 0 var(--fg);
       }
       .window[hidden] {
         display: none;
       }
+      /* Barra de título rayada con el nombre en un recuadro liso, estilo Mac clásico. */
       .titlebar {
+        position: relative;
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        height: 2.25rem;
-        padding: 0 0.5rem 0 0.9rem;
-        background: var(--bar);
-        border-bottom: 1px solid var(--line);
-        font-size: 13px;
-        font-weight: 600;
+        justify-content: center;
+        height: 1.9rem;
+        padding: 0 0.5rem;
+        border-bottom: 2px solid var(--fg);
+        background:
+          repeating-linear-gradient(var(--fg) 0 1px, transparent 1px 3px) center / calc(100% - 12px) 13px no-repeat,
+          var(--paper);
+        font-family: var(--pixel);
+        font-size: 12px;
         cursor: grab;
         user-select: none;
         touch-action: none;
@@ -311,127 +320,125 @@ try {
       .window.dragging .titlebar {
         cursor: grabbing;
       }
+      .title {
+        padding: 0 0.6rem;
+        background: var(--paper);
+      }
+      .controls {
+        position: absolute;
+        left: 0.9rem;
+        display: flex;
+        padding: 0 0.3rem;
+        background: var(--paper);
+      }
       .controls button {
-        display: grid;
-        place-items: center;
-        width: 1.6rem;
-        height: 1.6rem;
-        border: 0;
-        border-radius: 4px;
-        background: none;
-        color: var(--muted);
-        font-size: 12px;
+        width: 14px;
+        height: 14px;
+        padding: 0;
+        border: 2px solid var(--fg);
+        background: var(--paper);
         cursor: pointer;
       }
-      .controls button:hover {
-        background: color-mix(in srgb, var(--fg) 10%, transparent);
-        color: var(--fg);
+      .controls button:hover,
+      .controls button:active {
+        background: var(--fg);
       }
 
       .body {
         padding: 2rem 2.25rem 2.25rem;
       }
       .kicker {
-        margin: 0 0 0.5rem;
+        margin: 0 0 0.6rem;
         color: var(--red);
+        font-family: var(--pixel);
         font-size: 13px;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
       }
       h1 {
         margin: 0;
-        font-size: clamp(2.6rem, 8vw, 4.5rem);
+        font-family: 'Pixelify Sans', var(--pixel);
+        font-size: clamp(2.6rem, 8vw, 4.75rem);
         font-weight: 700;
-        line-height: 1;
-        letter-spacing: -0.03em;
+        line-height: 1.05;
       }
       h1 mark {
-        color: inherit;
-        background: linear-gradient(transparent 62%, var(--highlight) 62%);
+        padding: 0 0.12em;
+        background: var(--yellow);
+        color: #151515;
+        box-shadow: 4px 4px 0 var(--fg);
       }
       .lead {
-        margin: 1.1rem 0 0;
+        margin: 1.25rem 0 0;
         max-width: 32rem;
         color: var(--muted);
-        font-size: 1.05rem;
       }
 
       .progress {
         margin-top: 1.75rem;
-        font-size: 13px;
-        font-weight: 500;
+        font-family: var(--pixel);
+        font-size: 11px;
       }
       .progress .row {
         display: flex;
         justify-content: space-between;
         margin-bottom: 0.4rem;
-        color: var(--muted);
-      }
-      .soon {
-        font-family: 'IBM Plex Mono', ui-monospace, monospace;
-        color: var(--fg);
       }
       .caret {
         animation: blink 1s steps(1) infinite;
       }
+      /* Barra que se llena de a bloques, como un instalador viejo. */
       .bar {
-        position: relative;
         display: block;
-        height: 0.9rem;
-        border: 1px solid var(--fg);
-        border-radius: 4px;
-        background: var(--bg);
-        overflow: hidden;
+        height: 1.1rem;
+        padding: 2px;
+        border: 2px solid var(--fg);
+        background: var(--paper);
       }
       .bar span {
-        position: absolute;
-        inset: 0;
-        width: 40%;
-        background: repeating-linear-gradient(
-          -45deg,
-          var(--yellow) 0 8px,
-          color-mix(in srgb, var(--yellow) 70%, var(--red)) 8px 16px
-        );
-        border-right: 1px solid var(--fg);
-        animation: fill 3s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+        display: block;
+        height: 100%;
+        width: 0;
+        background: repeating-linear-gradient(90deg, var(--blue) 0 10px, transparent 10px 12px);
+        animation: fill 4s steps(16, end) infinite;
       }
 
       .actions {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.75rem;
+        gap: 0.9rem;
         margin-top: 1.75rem;
       }
-      /* Botón "con relieve": borde inferior grueso que se hunde al apretar. */
       .btn {
         display: inline-block;
-        padding: 0.55rem 1.1rem;
-        border: 1.5px solid var(--fg);
-        border-bottom-width: 4px;
-        border-radius: 6px;
+        padding: 0.5rem 1rem;
+        border: 2px solid var(--fg);
         background: var(--paper);
+        box-shadow: 3px 3px 0 var(--fg);
         color: var(--fg);
-        font-weight: 700;
+        font-family: var(--pixel);
+        font-size: 13px;
         text-decoration: none;
-        transition: transform 0.1s ease;
       }
       .btn.primary {
         background: var(--yellow);
         color: #151515;
       }
       .btn:hover {
-        transform: translateY(-2px);
+        background: var(--fg);
+        color: var(--bg);
       }
       .btn:active {
-        transform: translateY(1px);
-        border-bottom-width: 2px;
-        margin-top: 2px;
+        transform: translate(3px, 3px);
+        box-shadow: none;
       }
 
       @media (max-width: 700px) {
         body {
           overflow: auto;
+        }
+        .menubar {
+          gap: 0.75rem;
+          font-size: 10px;
+          white-space: nowrap;
         }
         .menus,
         .clock {
@@ -441,8 +448,8 @@ try {
           display: flex;
           flex-direction: column-reverse;
           justify-content: flex-end;
-          gap: 1rem;
-          padding: 1rem;
+          gap: 1.25rem;
+          padding: 1rem 1.25rem 1rem 1rem;
         }
         .window {
           position: static;
@@ -466,17 +473,9 @@ try {
         }
       }
 
-      @keyframes pulse {
-        50% {
-          opacity: 0.25;
-        }
-      }
       @keyframes fill {
-        from {
-          transform: translateX(-100%);
-        }
         to {
-          transform: translateX(250%);
+          width: 100%;
         }
       }
       @keyframes blink {
@@ -489,7 +488,9 @@ try {
         *::before,
         *::after {
           animation: none !important;
-          transition: none !important;
+        }
+        .bar span {
+          width: 60%;
         }
       }
     </style>
