@@ -1,0 +1,49 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+const proyectos = (await getCollection('proyectos', ({ data }) => !data.borrador)).sort(
+  (a, b) => a.data.orden - b.data.orden,
+);
+---
+
+<Base>
+  <section class="hero">
+    <h1>Hola, soy Joaquín Becerra</h1>
+    <!-- TODO: reemplazar por tu bio -->
+    <p class="lead">
+      Software engineer. Me gusta construir productos de punta a punta, del backend a la
+      interfaz.
+    </p>
+  </section>
+
+  <section id="proyectos">
+    <h2>Proyectos</h2>
+    <ul class="cards">
+      {
+        proyectos.map((p) => (
+          <li class="card">
+            <h3>
+              <a href={`/proyectos/${p.id}/`}>{p.data.titulo}</a>
+            </h3>
+            <p>{p.data.resumen}</p>
+            <ul class="tags">
+              {p.data.stack.map((s) => (
+                <li>{s}</li>
+              ))}
+            </ul>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section id="contacto">
+    <h2>Contacto</h2>
+    <ul class="links">
+      <li><a href="https://github.com/jbecerra73">GitHub</a></li>
+      <li><a href="https://www.linkedin.com/in/joaquin-becerra-5b3388201">LinkedIn</a></li>
+      <li><a href="https://x.com/joaquinbecerra_">X</a></li>
+    </ul>
+  </section>
+</Base>

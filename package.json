@@ -1,0 +1,26 @@
+{
+  "name": "joaquinbecerra-me",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jbecerra73/jbecerra73.github.io.git"
+  },
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/jbecerra73/jbecerra73.github.io/issues"
+  },
+  "homepage": "https://github.com/jbecerra73/jbecerra73.github.io#readme",
+  "dependencies": {
+    "astro": "^7.4.2"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=22.23.4"
+  }
+}
